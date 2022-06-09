@@ -1,3 +1,5 @@
+Forked from: [https://github.com/asteasolutions/zod-to-openapi](https://github.com/asteasolutions/zod-to-openapi).
+
 # Zod to OpenAPI
 
 A library that uses [zod schemas](https://github.com/colinhacks/zod) to generate an Open API Swagger documentation.
@@ -26,26 +28,26 @@ Simply put, it turns this:
 
 ```ts
 const UserSchema = registry.register(
-  'User',
+  "User",
   z.object({
-    id: z.string().openapi({ example: '1212121' }),
-    name: z.string().openapi({ example: 'John Doe' }),
+    id: z.string().openapi({ example: "1212121" }),
+    name: z.string().openapi({ example: "John Doe" }),
     age: z.number().openapi({ example: 42 }),
   })
 );
 
 registry.registerPath({
-  method: 'get',
-  path: '/users/{id}',
-  summary: 'Get a single user',
+  method: "get",
+  path: "/users/{id}",
+  summary: "Get a single user",
   request: {
     params: z.object({ id: z.string() }),
   },
   responses: {
     200: {
-      mediaType: 'application/json',
+      mediaType: "application/json",
       schema: UserSchema.openapi({
-        description: 'Object with user data',
+        description: "Object with user data",
       }),
     },
   },
@@ -62,7 +64,7 @@ components:
       properties:
         id:
           type: string
-          example: '1212121'
+          example: "1212121"
         name:
           type: string
           example: John Doe
@@ -84,12 +86,12 @@ components:
           type: string
         required: true
     responses:
-      '200':
+      "200":
         description: Object with user data
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/User'
+              $ref: "#/components/schemas/User"
 ```
 
 and you can still use `UserSchema` and the `request.params` object to validate the input of your API.
@@ -111,13 +113,13 @@ To keep openapi definitions natural, we add an `openapi` method to all Zod objec
 Note: This should be done only once in a common-entrypoint file of your project (for example an `index.ts`/`app.ts`). If you're using tree-shaking with Webpack, mark that file as having side-effects.
 
 ```ts
-import { extendZodWithOpenApi } from '@asteasolutions/zod-to-openapi';
-import { z } from 'zod';
+import { extendZodWithOpenApi } from "@asteasolutions/zod-to-openapi";
+import { z } from "zod";
 
 extendZodWithOpenApi(z);
 
 // We can now use `.openapi()` to specify OpenAPI metadata
-z.string().openapi({ description: 'Some string' });
+z.string().openapi({ description: "Some string" });
 ```
 
 ### The Registry
@@ -125,10 +127,7 @@ z.string().openapi({ description: 'Some string' });
 The `OpenAPIRegistry` is used to track definitions which are later generated using the `OpenAPIGenerator` class.
 
 ```ts
-import {
-  OpenAPIRegistry,
-  OpenAPIGenerator,
-} from '@asteasolutions/zod-to-openapi';
+import { OpenAPIRegistry, OpenAPIGenerator } from "@asteasolutions/zod-to-openapi";
 
 const registry = new OpenAPIRegistry();
 
@@ -147,10 +146,10 @@ An OpenAPI schema should be registered using the `register` method of an `OpenAP
 
 ```ts
 const UserSchema = registry.register(
-  'User',
+  "User",
   z.object({
-    id: z.string().openapi({ example: '1212121' }),
-    name: z.string().openapi({ example: 'John Doe' }),
+    id: z.string().openapi({ example: "1212121" }),
+    name: z.string().openapi({ example: "John Doe" }),
     age: z.number().openapi({ example: 42 }),
   })
 );
@@ -166,7 +165,7 @@ components:
       properties:
         id:
           type: string
-          example: '1212121'
+          example: "1212121"
         name:
           type: string
           example: John Doe
@@ -193,20 +192,20 @@ An OpenAPI path is registered using the `registerPath` method of an `OpenAPIRegi
 
 ```ts
 registry.registerPath({
-  method: 'get',
-  path: '/users/{id}',
-  description: 'Get user data by its id',
-  summary: 'Get a single user',
+  method: "get",
+  path: "/users/{id}",
+  description: "Get user data by its id",
+  summary: "Get a single user",
   request: {
     params: z.object({
-      id: z.string().openapi({ example: '1212121' }),
+      id: z.string().openapi({ example: "1212121" }),
     }),
   },
   responses: {
     200: {
-      mediaType: 'application/json',
+      mediaType: "application/json",
       schema: UserSchema.openapi({
-        description: 'Object with user data.',
+        description: "Object with user data.",
       }),
     },
     204: z.void(),
@@ -217,7 +216,7 @@ registry.registerPath({
 The YAML equivalent of the schema above would be:
 
 ```yaml
-'/users/{id}':
+"/users/{id}":
   get:
     description: Get user data by its id
     summary: Get a single user
@@ -226,16 +225,16 @@ The YAML equivalent of the schema above would be:
         name: id
         schema:
           type: string
-          example: '1212121'
+          example: "1212121"
         required: true
     responses:
-      '200':
+      "200":
         description: Object with user data.
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/User'
-      '204':
+              $ref: "#/components/schemas/User"
+      "204":
         description: No content - successful operation
 ```
 
@@ -307,13 +306,13 @@ A full OpenAPI document can be generated using the `generateDocument` method of 
 
 ```ts
 return generator.generateDocument({
-  openapi: '3.0.0',
+  openapi: "3.0.0",
   info: {
-    version: '1.0.0',
-    title: 'My API',
-    description: 'This is the API',
+    version: "1.0.0",
+    title: "My API",
+    description: "This is the API",
   },
-  servers: [{ url: 'v1' }],
+  servers: [{ url: "v1" }],
 });
 ```
 
